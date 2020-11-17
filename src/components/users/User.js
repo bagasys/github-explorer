@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Grid from '@material-ui/core/Grid'
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +9,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Repos from "../repos/Repos";
+import GithubContext from "../../context/github/githubContext";
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,14 +42,18 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const User = (props) => {
+const User = ({match}) => {
     const classes = useStyles();
+
+    const githubContext = useContext(GithubContext);
+    const {getUser, getUserRepos, loading, user, userRepos} = githubContext;
+
     useEffect(() => {
-        props.getUser(props.match.params.login)
-        props.getUserRepos(props.match.params.login)
+        getUser(match.params.login)
+        getUserRepos(match.params.login)
 
     }, []);
-    if (props.loading) {
+    if (loading) {
         return 'loading';
     } else {
         return (
@@ -63,7 +68,7 @@ const User = (props) => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        {props.user.hireable ? (<CheckIcon fontSize="large" style={{color: "green"}}/>) : (
+                        {user.hireable ? (<CheckIcon fontSize="large" style={{color: "green"}}/>) : (
                             <CloseIcon fontSize="large" style={{color: "red"}}/>)}
                     </Grid>
                 </Grid>
@@ -72,29 +77,29 @@ const User = (props) => {
                           component={Paper}>
                         <Grid xs={12} md={5} item container direction="column" alignItems="center" spacing={1}>
                             <Grid item>
-                                <Avatar style={{width: "7em", height: "7em"}} src={props.user.avatar_url}/>
+                                <Avatar style={{width: "7em", height: "7em"}} src={user.avatar_url}/>
                             </Grid>
                             <Grid item>
                                 <Typography variant="h4">
-                                    {props.user.name}
+                                    {user.name}
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                Location: {props.user.location}
+                                Location: {user.location}
                             </Grid>
                         </Grid>
                         <Grid xs={12} md={5} item container direction="column" spacing={3}>
                             <Grid item>
                                 Bio <br/>
-                                {props.user.bio}
+                                {user.bio}
                             </Grid>
                             <Grid item>
                                 <Button variant="contained" color="primary">Visit GitHub Profile</Button>
                             </Grid>
                             <Grid item>
-                                <Typography>Username: {props.user.login}</Typography>
-                                <Typography>Company: {props.user.company}</Typography>
-                                <Typography>Website: {props.user.blog}</Typography>
+                                <Typography>Username: {user.login}</Typography>
+                                <Typography>Company: {user.company}</Typography>
+                                <Typography>Website: {user.blog}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -104,25 +109,25 @@ const User = (props) => {
                         <Grid container justify="center" alignItems="center" spacing={5}>
                             <Grid item>
                                 <div className={classes.followerCountContainer}>
-                                    Followers: {props.user.followers}
+                                    Followers: {user.followers}
                                 </div>
                             </Grid>
                             <Grid item>
-                                <div className={classes.followingCountContainer}>Following: {props.user.following}</div>
+                                <div className={classes.followingCountContainer}>Following: {user.following}</div>
                             </Grid>
                             <Grid item>
                                 <div className={classes.publicReposCountContainer}>Public
-                                    Repos: {props.user.public_repos}</div>
+                                    Repos: {user.public_repos}</div>
                             </Grid>
                             <Grid item>
                                 <div className={classes.publicGistsCountContainer}>Public
-                                    Gists: {props.user.public_gists}</div>
+                                    Gists: {user.public_gists}</div>
                             </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
                 <Grid item>
-                    <Repos repos={props.userRepos}/>
+                    <Repos repos={userRepos}/>
                 </Grid>
             </Grid>
         )

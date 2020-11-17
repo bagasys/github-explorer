@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from "@material-ui/core/Paper"
 import IconButton from "@material-ui/core/IconButton";
@@ -6,6 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from "@material-ui/icons/Search";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import GithubContext from "../../context/github/githubContext";
+import AlertContext from "../../context/alert/alertContext";
 
 
 const useStyles = makeStyles(theme => ({
@@ -38,6 +40,15 @@ const useStyles = makeStyles(theme => ({
 
 function Search(props) {
     const classes = useStyles();
+
+    const githubContext = useContext(GithubContext);
+    const {searchUsers, clearUsers, users} = githubContext;
+
+    const alertContext = useContext(AlertContext);
+    const {showAlert} = alertContext;
+
+    const showClear = users.length > 0;
+
     const [query, setQuery] = useState('');
 
     const handleQueryChange = (e) => {
@@ -47,9 +58,9 @@ function Search(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (query === '') {
-            props.showAlert('Please enter something', 'warning')
+            showAlert('Please enter something', 'warning')
         } else {
-            props.searchUsers(query);
+            searchUsers(query);
             setQuery('');
         }
     }
@@ -65,8 +76,8 @@ function Search(props) {
                         value={query}
                         onChange={handleQueryChange}
                     />
-                    {props.showClear && <IconButton className={classes.iconButton} aria-label="clear search results"
-                                                    onClick={props.clearUsers}>
+                    {showClear && <IconButton className={classes.iconButton} aria-label="clear search results"
+                                                    onClick={clearUsers}>
                         <ClearIcon/>
                     </IconButton>}
 
