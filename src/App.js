@@ -17,12 +17,20 @@ const App = () => {
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState({});
+    const [userRepos, setUserRepos] = useState([]);
     const [alert, setAlert] = useState({text: '', type: ''});
 
     const getUser = async (queryText) => {
         setLoading(true);
         const res = await axios.get(`https://api.github.com/users/${queryText}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
         setUser(res.data);
+        setLoading(false);
+    };
+
+    const getUserRepos = async (queryText) => {
+        setLoading(true);
+        const res = await axios.get(`https://https://api.github.com/users/${queryText}/repos?per_page=5&sort=created&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+        setUserRepos(res.data);
         setLoading(false);
     };
 
@@ -59,8 +67,9 @@ const App = () => {
                             </Fragment>
                         )}/>
                         <Route exact path="/user/:login" render={(props) => (
-                            <User { ...props } getUser={getUser} user={user} loading={loading}/>
-                        ) }/>
+                            <User {...props} getUser={getUser} user={user} getUserRepos={getUserRepos}
+                                  userRepos={userRepos} loading={loading}/>
+                        )}/>
                     </Switch>
                 </Container>
             </BrowserRouter>
