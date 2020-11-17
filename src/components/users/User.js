@@ -1,12 +1,15 @@
 import React, {useEffect} from 'react';
 import Grid from '@material-ui/core/Grid'
 import Button from "@material-ui/core/Button";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
-import CheckIcon from '@material-ui/icons/Check';
 import Avatar from "@material-ui/core/Avatar";
-import CloseIcon from '@material-ui/icons/Close';
 import Paper from "@material-ui/core/Paper";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+import Repos from "../repos/Repos";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,6 +45,8 @@ const User = (props) => {
     const classes = useStyles();
     useEffect(() => {
         props.getUser(props.match.params.login)
+        props.getUserRepos(props.match.params.login)
+
     }, []);
     if (props.loading) {
         return 'loading';
@@ -115,6 +120,9 @@ const User = (props) => {
                             </Grid>
                         </Grid>
                     </Paper>
+                </Grid>
+                <Grid item>
+                    <Repos repos={props.userRepos}/>
                 </Grid>
             </Grid>
         )

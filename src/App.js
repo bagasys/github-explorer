@@ -29,7 +29,7 @@ const App = () => {
 
     const getUserRepos = async (queryText) => {
         setLoading(true);
-        const res = await axios.get(`https://https://api.github.com/users/${queryText}/repos?per_page=5&sort=created&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+        const res = await axios.get(`https://api.github.com/users/bradtraversy/repos`);
         setUserRepos(res.data);
         setLoading(false);
     };

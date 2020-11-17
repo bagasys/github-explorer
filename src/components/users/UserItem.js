@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
-import Avatar from "@material-ui/core/Avatar";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles(theme => ({
     avatar: {
@@ -32,8 +33,6 @@ const useStyles = makeStyles(theme => ({
 function UserItem({user}) {
     const classes = useStyles();
 
-    const bull = <span className={classes.bullet}>•</span>;
-
     return (
         <Card className={classes.card}>
             <Grid container justify="center" alignItems="center" direction="column" spacing={1}>
@@ -48,7 +47,6 @@ function UserItem({user}) {
                 </Grid>
             </Grid>
         </Card>
-
     );
 }
 
